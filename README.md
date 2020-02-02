@@ -108,6 +108,11 @@ Display how many time elapsed since program start or since last call to `AllDone
     // Show time elapsed since last call to AllDone()
     slogan.AllDone()
 ```
+Output will be a notice :
+
+```go
+  notice    All done in : 296.538µs
+```
 
 ## Configuring ##
 
