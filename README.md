@@ -95,7 +95,7 @@ Call to `Trace/1` will produce a trace log made of several lines. First line wit
 
 
 ```go
-	log.Trace(Something)
+	slogan.Trace(Something)
 ```
 
 ### Time elapsed ###
