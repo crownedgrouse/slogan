@@ -231,7 +231,7 @@ var colors = map[int]string{
 	3:  "Red",          // critical
 	2:  "BLightRed",    // alert
 	1:  "BRed",         // emergency
-	0:  "",             // Silent
+	0:  "",             // Prefix
 }
 ```
 
