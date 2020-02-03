@@ -175,7 +175,7 @@ Set or change verbosity from 0 (silent) to 9 (debug) :
 ```go
 slogan.SetVerbosity(0) // Silent totally logs
 ```
-By setting verbosity, all logs whith level lower or equal will be generated if no immediate exit on error was set :
+By setting verbosity, all logs with level lower or equal will be generated if no immediate exit on error was set :
 
 ```go
 log.SetExitOnError(true) // Exit if log level reach Error or higher.
