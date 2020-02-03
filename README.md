@@ -91,7 +91,7 @@ slogan.Runtime()
 
 ### Trace Go values ###
 
-Call to `Trace/1` will produce a trace log made of several lines. First line with 'trace' level and type a the value given. Below is written three usual ways to display Go values (%v, %v+ and %#v) separated with an empty line.
+Call to `Trace/1` will produce a trace log made of several lines. First line with 'trace' level and type of the value given. Below is written three usual ways to display Go values (%v, %v+ and %#v) separated with an empty line.
 
 
 ```go
@@ -103,7 +103,7 @@ Call to `Trace/1` will produce a trace log made of several lines. First line wit
 Display how many time elapsed since program start or since last call to `AllDone()` .
 
 ```go
-	// Show time elapsed since beginning
+    // Show time elapsed since beginning
     slogan.AllDone()
     // Show time elapsed since last call to AllDone()
     slogan.AllDone()
@@ -156,19 +156,19 @@ Will produce something like below :
    notice    main.go:20     A warning
    error     main.go:21     An Error
 ```
+as well date/time information can be set this way.
 
+Set a prefix to any log :
+
+```go
+	log.SetPrefix("===> ")
+```
 ### Behaviour ###
 
 Considering Warning as Error (and potentialy exit) :
 
 ```go
 	log.SetWarningAsError()
-```
-
-Set a prefix to any log :
-
-```go
-	log.SetPrefix("===> ")
 ```
 
 ### Formats ###
@@ -224,11 +224,11 @@ var colors = map[int]string{
 }
 ```
 
-As well colorization of elements in log line can be tuned by changing `parts` map, with `GetParts/0` and `SetParts/1`
+As well colorization of elements (called 'parts') in log line can be tuned by changing `parts` map, with `GetParts/0` and `SetParts/1`
 
 ```go
 var parts = map[string]bool{
-	"caller": true,            // colorize caller
+	"caller": true,            // colorize caller (event if it is underlining)
 	"tag":    true,            // colorize tag
 	"log":    false,           // do not colorize log entry
 	"prefix": false,           // do not colorize prefix
