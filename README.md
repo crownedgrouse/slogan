@@ -180,7 +180,7 @@ By setting verbosity, all logs with level lower or equal will be generated if no
 ```go
 log.SetExitOnError(true) // Exit if log level reach Error or higher.
 ```
-If the case, the error message is generated and a debug level may appear, depending current verbosity, indicating that an immediate exit happend, and telling what it the program exit code. The exit code is equal to the level reached by the last fatal error, i.e 1 (emergency) to 4 (error) , or even 5 if warning considered error.
+If the case, the error message is generated and a debug level may appear, depending current verbosity, indicating that an immediate exit occured, and telling what it the program exit code. The exit code is equal to the level reached by the last fatal error, i.e 1 (emergency) to 4 (error) , or even 5 if warning considered error.
 
 ### Formats ###
 
