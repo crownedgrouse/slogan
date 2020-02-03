@@ -178,7 +178,7 @@ slogan.SetVerbosity(0) // Silent totally logs
 By setting verbosity, all logs with level lower or equal will be generated (if no immediate exit on error was set and no error occured) :
 
 ```go
-log.SetExitOnError(true) // Exit if log level reach Error or higher.
+log.SetExitOnError(true) // Exit if log level reach Error or worst.
 ```
 If the case, the error message is generated and a debug level may appear, depending current verbosity, indicating that an immediate exit occured, and telling what is the program exit code. The exit code is equal to the level reached by the last fatal error, i.e 1 (emergency) to 4 (error) , or even 5 if warning considered error.
 
