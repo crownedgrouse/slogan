@@ -11,6 +11,7 @@ import (
  	"path"
  	"time"
 	"github.com/bclicn/color"    // colorize output
+    "golang.org/x/crypto/ssh/terminal"
 )
 
 /*
@@ -41,7 +42,8 @@ const (
     LstdFlags     = log.Ldate | log.Ltime 
 )
 
-var logger = log.New(os.Stderr, "", 0)
+var logger     = log.New(os.Stderr, "", 0)
+var isTerminal = terminal.IsTerminal(int(os.Stderr.Fd()))
 
 var start = time.Now()
 var last  = time.Now()
@@ -101,6 +103,7 @@ var WarningAsError 	bool = false
 var TraceCaller 	bool = false
 var CallerBase  	bool = true
 var Colorize    	bool = true
+var ForceColorize   bool = false  // Force even if output is not Terminal
 
 //************ Exported functions for configuration *************
 
@@ -126,6 +129,10 @@ func SetTraceCaller(mode bool) {
 /* Colorize or not */
 func SetColor(mode bool) {
 	Colorize = mode
+}
+
+func SetForceColor(mode bool) {
+	ForceColorize = mode
 }
 
 func GetColors()map[int]string{
@@ -355,6 +362,9 @@ func logfmt (level int, log string) string {
 }
 
 func colorize(what string, level int, str string) string{
+	if isTerminal == false && ForceColorize == false {
+		return str
+	}
 	if Colorize == true && parts[what] == true {
 		return setcolor(what, level, str)
 	}else{
