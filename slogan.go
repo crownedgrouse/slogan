@@ -173,6 +173,9 @@ func SetPrefix(prefix string) string{
 
 
 func SetOutput(w io.Writer){
+	if ( w != os.Stderr || w != os.Stdout) {
+		isTerminal = false
+	}
 	logger.SetOutput(w)
 }
 
