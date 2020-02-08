@@ -39,7 +39,7 @@ func main() {
 	log.SetExitOnError(true) 
 
 	// Set verbosity
-	log.SetVerbosity(9)
+	log.SetVerbosity(log.Ltrace)
 	//
 	log.Runtime()
 	log.Trace(map[string]string{"this is a": "map"})
@@ -145,7 +145,7 @@ var tags = [10]string{
 For instance to show caller and line number in code :
 
 ```go
-	slogan.SetFlags(log.Lshortfile)  // Need to import "log" for this
+	slogan.SetFlags(slogan.Lshortfile)  // No need to import "log". Same constants used in "slogan".
 ```
 
 Will produce something like below : 
@@ -173,7 +173,8 @@ Considering Warning as Error (and potentialy exit) :
 Set or change verbosity from 0 (silent) to 9 (debug) :
 
 ```go
-slogan.SetVerbosity(0) // Silent totally logs
+slogan.SetVerbosity(0)              // Silent totally logs
+slogan.SetVerbosity(slogan.Lsilent) // Same but using "slogan" Levels constant
 ```
 By setting verbosity, all logs with level lower or equal will be generated (if no immediate exit on error was set and no error occured) :
 
@@ -202,14 +203,14 @@ slogan.SetFlags(log.Lshortfile) // caller is required to be shown
 Default formats are : 
 ```go
 var formats = map[string]string{
-	"fatal"   : "Immediate exit with code %d",                       // immediate exit on error format
-	"trace"   : "%[1]T\n%%v: %[1]v\n\n%%v+: %+[1]v\n\n%%#v: %#[1]v", // multiline trace format
-	"empty"   : "%#v",                                               // trace format for empty variable (avoid unuseful multiline)
-	"runtime" : "OS:%s ARCH:%s CPU:%d COMPILER:%s ROOT:%s",          // runtime infos format
-	"default" : "   %[1]s %[2]s",                                    // default log format
-	"caller"  : "   %[1]s %[3]s\t %[2]s",                            // default log format with caller (where)
-	"where"   : "%s:%d",                                             // format for caller location path:linenumber
-	"elapsed" : "All done in : %s",                                  // elapsed time format
+	"fatal"   : "Immediate exit with code %d",                        // immediate exit on error format
+	"trace"   : "%[1]T\n %%v: %[1]v\n\n%%v+: %+[1]v\n\n%%#v: %#[1]v", // multiline trace format
+	"empty"   : "%#v",                                                // trace format for empty variable (avoid unuseful multiline)
+	"runtime" : "OS:%s ARCH:%s CPU:%d COMPILER:%s ROOT:%s",           // runtime infos format
+	"default" : "   %[1]s %[2]s",                                     // default log format
+	"caller"  : "   %[1]s %[3]s\t %[2]s",                             // default log format with caller (where)
+	"where"   : "%s:%d",                                              // format for caller location path:linenumber
+	"elapsed" : "All done in : %s",                                   // elapsed time format
 }
 ``` 
 
