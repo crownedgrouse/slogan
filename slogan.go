@@ -19,6 +19,16 @@ import (
  *        Instead add an underscore to silent the trace, and can be removed later to reactivate the trace.
  */
 
+const (
+    Ldate         = log.Ldate
+    Ltime         = log.Ltime
+    Lmicroseconds = log.Lmicroseconds
+    Llongfile     = log.Llongfile
+    Lshortfile    = log.Lshortfile
+    LUTC          = log.LUTC
+    LstdFlags     = log.Ldate | log.Ltime 
+)
+
 var logger = log.New(os.Stderr, "", 0)
 
 var start = time.Now()
@@ -120,14 +130,14 @@ func SetColors(n map[int]string)map[int]string{
 
 /* API for logger override */
 func SetFlags(flag int){
-	if (flag & log.Lshortfile) == log.Lshortfile {
+	if (flag & Lshortfile) == Lshortfile {
 		TraceCaller = true
 		CallerBase  = true
-		SetFlags(flag - log.Lshortfile)
-	} else 	if (flag & log.Llongfile) == log.Llongfile{
+		SetFlags(flag - Lshortfile)
+	} else 	if (flag & Llongfile) == Llongfile{
 		TraceCaller = true
 		CallerBase  = false
-		SetFlags(flag - log.Llongfile)
+		SetFlags(flag - Llongfile)
 	} else {
 		logger.SetFlags(flag)
 	}
