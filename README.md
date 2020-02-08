@@ -140,7 +140,21 @@ var tags = [10]string{
 
 ### Output ###
 
-Default output is on STDERR.
+Default output is on STDERR. Output can be set in a file by passing File Descriptor to "slogan".
+
+```go
+	f, err := os.OpenFile("/var/log/myown.log", os.O_RDWR|os.O_CREATE, 0755)
+	if err != nil {
+		log.Critical("Cannot open file")
+	}
+	log.SetOutput(f)
+```
+Color will be disabled if output is not a Terminal unless forcing it.
+
+```go
+    log.SetForceColor(true)
+
+```
 
 `slogan` is using legacy "log" package underneath. `SetFlags` can be used to change "log" parameters.
 
