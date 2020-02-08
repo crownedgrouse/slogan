@@ -18,6 +18,18 @@ import (
  *        This avoid having 'declared and not used' build errors when commenting traces on variables.
  *        Instead add an underscore to silent the trace, and can be removed later to reactivate the trace.
  */
+const (
+		Lsilent    = 0
+		Lemergency = 1
+		Lalert     = 2
+		Lcritical  = 3
+		Lerror     = 4
+		Lwarning   = 5
+		Lnotice    = 6
+		Linfo      = 7
+		Ldebug     = 8
+		Ltrace     = 9
+)
 
 const (
     Ldate         = log.Ldate
@@ -48,7 +60,7 @@ var tags = [10]string{
 
 var formats = map[string]string{
 	"fatal"   : "Immediate exit with code %d", // immediate exit on error format
-	"trace"   : "%[1]T\n%%v: %[1]v\n\n%%v+: %+[1]v\n\n%%#v: %#[1]v",
+	"trace"   : "%[1]T\n %%v: %[1]v\n\n%%v+: %+[1]v\n\n%%#v: %#[1]v",
 	"empty"   : "%#v",
 	"runtime" : "OS:%s ARCH:%s CPU:%d COMPILER:%s ROOT:%s",
 	"default" : "   %[1]s %[2]s",
@@ -81,7 +93,7 @@ var parts = map[string]bool{
 
 var offset = 0
 
-var Verbosity   	int  = 5
+var Verbosity   	int  = Lwarning
 var ExitOnError 	bool = false
 var WarningAsError 	bool = false
 var TraceCaller 	bool = false
@@ -158,6 +170,8 @@ func SetOutput(w io.Writer){
 func AllDone(){
 	elapsed := time.Since(start)
 	defer resetStart()
+	incr_offset()
+	defer decr_offset()
     Notice(fmt.Sprintf(formats["elapsed"], elapsed))
 }
 
@@ -215,47 +229,47 @@ func SetParts(n map[string]bool)map[string]bool{
 
 // Silent a log while keeping it
 func Silent(log string) {
-	Log(-1, log)
+	Log(Lsilent, log)
 }
 
 func Emergency(log string) {
-	Log(1, log)
+	Log(Lemergency, log)
 }
 
 func Alert(log string) {
-	Log(2, log)
+	Log(Lalert, log)
 }
 
 func Critical(log string) {
-	Log(3, log)
+	Log(Lcritical, log)
 }
 
 func Error(log string) {
-	Log(4, log)
+	Log(Lerror, log)
 }
 
 func Warning(log string) {
-	Log(5, log)
+	Log(Lwarning, log)
 }
 
 func Notice(log string) {
-	Log(6, log)
+	Log(Lnotice, log)
 }
 
 func Info(log string) {
-	Log(7, log)
+	Log(Linfo, log)
 }
 
 func Debug(log string) {
-	Log(8, log)
+	Log(Ldebug, log)
 }
 
 // Trace non string as debug
 func Trace(trace interface{}) {
 	if fmt.Sprintf("%v", trace) == "[]" {
-		Log(9, fmt.Sprintf(formats["empty"], trace))
+		Log(Ltrace, fmt.Sprintf(formats["empty"], trace))
 	} else {
-		Log(9, fmt.Sprintf(formats["trace"], trace))
+		Log(Ltrace, fmt.Sprintf(formats["trace"], trace))
 	}	
 }
 func Trace_(trace interface{}){} 
@@ -288,7 +302,7 @@ func Log(level int, log string) {
 		Str := logfmt(level, log)
 		logger.Println(Str)
 	}
-	if (level < 5) && (ExitOnError == true) {
+	if ((level < Lwarning) || (level == Lwarning && WarningAsError == true)) && (ExitOnError == true) {
 			Debug(fmt.Sprintf(formats["fatal"], level))
 			os.Exit(level)
 	}	
