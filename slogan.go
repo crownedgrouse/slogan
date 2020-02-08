@@ -305,6 +305,8 @@ func Log(level int, log string) {
 	if ((level < Lwarning) || (level == Lwarning && WarningAsError == true)) && (ExitOnError == true) {
 		incr_offset()
 		defer decr_offset()
+		incr_offset()
+		defer decr_offset()
 		Debug(fmt.Sprintf(formats["fatal"], level))
 		os.Exit(level)
 	}	
