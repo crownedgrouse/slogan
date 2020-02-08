@@ -247,6 +247,10 @@ func SetParts(n map[string]bool)map[string]bool{
 	return old
 }
 
+func IsTerminal() bool{
+	return isTerminal
+}
+
 //********** Exported functions for logging ****************************
 
 // silent 0 | emergency 1 | alert 2 | critical 3 | error 4 | warning 5 | notice 6 | info 7 | debug 8 | trace 9
