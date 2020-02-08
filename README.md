@@ -100,13 +100,13 @@ Call to `Trace/1` will produce a trace log made of several lines. First line wit
 
 ### Time elapsed ###
 
-Display how many time elapsed since program start or since last call to `AllDone()` .
+Display how many time elapsed since program start or since last call to `ElapsedTime()` .
 
 ```go
-    // Show time elapsed since beginning
+    // Show time elapsed since beginning. This will reset start time reference
     slogan.AllDone()
-    // Show time elapsed since last call to AllDone()
-    slogan.AllDone()
+    // Show time elapsed since last call to ElapsedTime() or since beginning at first call
+    slogan.ElapsedTime()
 ```
 Output will be a notice :
 
@@ -210,7 +210,8 @@ var formats = map[string]string{
 	"default" : "   %[1]s %[2]s",                                     // default log format
 	"caller"  : "   %[1]s %[3]s\t %[2]s",                             // default log format with caller (where)
 	"where"   : "%s:%d",                                              // format for caller location path:linenumber
-	"elapsed" : "All done in : %s",                                   // elapsed time format
+	"alldone" : "All done in : %s",                                   // all done time format
+	"elapsed" : "Elapsed time : %s",                                  // elapsed time format
 }
 ``` 
 

@@ -44,6 +44,7 @@ const (
 var logger = log.New(os.Stderr, "", 0)
 
 var start = time.Now()
+var last  = time.Now()
 
 var tags = [10]string{
 		"",          // Prefix
@@ -66,7 +67,8 @@ var formats = map[string]string{
 	"default" : "   %[1]s %[2]s",
 	"caller"  : "   %[1]s %[3]s\t %[2]s",
 	"where"   : "%s:%d",
-	"elapsed" : "All done in : %s",
+	"alldone" : "All done in : %s",
+	"elapsed" : "Elapsed time : %s",
 }
 
 var colors = map[int]string{
@@ -172,11 +174,23 @@ func AllDone(){
 	defer resetStart()
 	incr_offset()
 	defer decr_offset()
+    Notice(fmt.Sprintf(formats["alldone"], elapsed))
+}
+
+func ElapsedTime(){
+	elapsed := time.Since(last)
+	defer resetLast()
+	incr_offset()
+	defer decr_offset()
     Notice(fmt.Sprintf(formats["elapsed"], elapsed))
 }
 
 func resetStart(){
 	start = time.Now()
+}
+
+func resetLast(){
+	last = time.Now()
 }
 
 //*** Levels ***
