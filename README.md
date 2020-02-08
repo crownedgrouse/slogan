@@ -56,7 +56,7 @@ func main() {
 ```
 Will produce (color not visible in this example):
 
-```shell
+```
 $ go build
 $ ./main
    debug     OS:linux ARCH:386 CPU:4 COMPILER:gc ROOT:/home/eric/git/goroot
@@ -92,6 +92,7 @@ slogan.Runtime()
 ### Trace Go values ###
 
 Call to `Trace/1` will produce a trace log made of several lines. First line with 'trace' level and type of the value given. Below is written three usual ways to display Go values (%v, %v+ and %#v) separated with an empty line.
+This format can be overrriden by your own preference (See 'Configuring/Formats' below).
 
 
 ```go
@@ -103,10 +104,10 @@ Call to `Trace/1` will produce a trace log made of several lines. First line wit
 Display how many time elapsed since program start or since last call to `ElapsedTime()` .
 
 ```go
-    // Show time elapsed since beginning. This will reset start time reference
-    slogan.AllDone()
     // Show time elapsed since last call to ElapsedTime() or since beginning at first call
     slogan.ElapsedTime()
+    // Show time elapsed since beginning. This will reset start time reference
+    slogan.AllDone()
 ```
 Output will be a notice :
 
