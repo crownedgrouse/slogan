@@ -303,8 +303,10 @@ func Log(level int, log string) {
 		logger.Println(Str)
 	}
 	if ((level < Lwarning) || (level == Lwarning && WarningAsError == true)) && (ExitOnError == true) {
-			Debug(fmt.Sprintf(formats["fatal"], level))
-			os.Exit(level)
+		incr_offset()
+		defer decr_offset()
+		Debug(fmt.Sprintf(formats["fatal"], level))
+		os.Exit(level)
 	}	
 }
 
