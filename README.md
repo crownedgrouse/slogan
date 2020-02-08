@@ -61,7 +61,7 @@ $ go build
 $ ./main
    debug     OS:linux ARCH:386 CPU:4 COMPILER:gc ROOT:/home/eric/git/goroot
    trace     map[string]string
-%v: map[this is a:map]
+ %v: map[this is a:map]
 
 %v+: map[this is a:map]
 
