@@ -185,7 +185,7 @@ Set a prefix to any log :
 Considering Warning as Error (and potentialy exit) :
 
 ```go
-	log.SetWarningAsError()
+	log.SetWarningAsError(true)
 ```
 Set or change verbosity from 0 (silent) to 9 (debug) :
 
