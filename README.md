@@ -234,7 +234,7 @@ var formats = map[string]string{
 
 ### Colors ###
 
-Color will be disabled if output is not a terminal. This can be avoid however by calling `SetForceColor/0` .
+Color will be disabled if output is not a terminal. This can be avoid however by calling `SetForceColor/1` .
 
 Colors can be changed by overwritting `colors` map, with `GetColors/0` and `SetColors/1`.
 
