@@ -6,7 +6,8 @@
   "license": "MIT",
   "dependencies": {
   },
+  "repository": "git://github.com/crownedgrouse/slogan.git",
   "publishConfig": {
     "registry":"https://npm.pkg.github.com/"
-  },
+  }
 }
