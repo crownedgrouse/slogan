@@ -1,0 +1,12 @@
+{
+  "name": "@crownedgrouse/slogan",
+  "version": "1.1.0",
+  "description": "Go(lang) logger library",
+  "author": "Eric PAILLEAU",
+  "license": "MIT",
+  "dependencies": {
+  },
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com/"
+  },
+}
