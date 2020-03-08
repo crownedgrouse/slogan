@@ -1,3 +1,4 @@
+// slogan is a logger library for Golang.
 package slogan
 
 import (
@@ -19,6 +20,8 @@ import (
  *        This avoid having 'declared and not used' build errors when commenting traces on variables.
  *        Instead add an underscore to silent the trace, and can be removed later to reactivate the trace.
  */
+
+// Contants for log levels
 const (
 	Lsilent    = 0
 	Lemergency = 1
@@ -32,6 +35,7 @@ const (
 	Ltrace     = 9
 )
 
+// Contants for legacy log package
 const (
 	Ldate         = log.Ldate
 	Ltime         = log.Ltime
@@ -42,12 +46,19 @@ const (
 	LstdFlags     = log.Ldate | log.Ltime
 )
 
+// Default legacy logger on stderr
 var logger = log.New(os.Stderr, "", 0)
+
+// Check if stderr is a terminal
 var isTerminal = terminal.IsTerminal(int(os.Stderr.Fd()))
 
+// Start time reference
 var start = time.Now()
+// Last time reference
 var last = time.Now()
 
+// tags map per log level.
+// index 0 is reserved for log prefix
 var tags = [10]string{
 	"",          // Prefix
 	"emergency", // 1
@@ -61,6 +72,7 @@ var tags = [10]string{
 	"trace    ", // 9
 }
 
+// log formats map
 var formats = map[string]string{
 	"fatal":   "Immediate exit with code %d", // immediate exit on error format
 	"trace":   "%[1]T\n %%v: %[1]v\n\n%%v+: %+[1]v\n\n%%#v: %#[1]v",
@@ -73,6 +85,9 @@ var formats = map[string]string{
 	"elapsed": "Elapsed time : %s",
 }
 
+// colors map.
+// index 0 is for log prefix.
+// index 10 is for caller.
 var colors = map[int]string{
 	10: "Underline",
 	9:  "DarkGray",
@@ -87,6 +102,7 @@ var colors = map[int]string{
 	0:  "",
 }
 
+// parts map.
 // What parts of log should be colorized if Colorize=true
 var parts = map[string]bool{
 	"caller": true,
@@ -95,15 +111,23 @@ var parts = map[string]bool{
 	"prefix": false,
 }
 
+// offset for stack depth
 var offset = 0
 
+// verbosity
 var Verbosity int = Lwarning
+// should exit on error ?
 var ExitOnError bool = false
+// should warning be error ?
 var WarningAsError bool = false
+// should trace caller ?
 var TraceCaller bool = false
+// should show only basename of caller
 var CallerBase bool = true
+// should colorize ?
 var Colorize bool = true
-var ForceColorize bool = false // Force even if output is not Terminal
+// should colorize even if output is not a terminal ?
+var ForceColorize bool = false 
 
 //************ Exported functions for configuration *************
 
@@ -117,6 +141,7 @@ func SetExitOnError(mode bool) {
 	ExitOnError = mode
 }
 
+/* Set warning as error */
 func SetWarningAsError(mode bool) {
 	WarningAsError = mode
 }
@@ -131,18 +156,22 @@ func SetColor(mode bool) {
 	Colorize = mode
 }
 
+/* Force colorization even if not a terminal */
 func SetForceColor(mode bool) {
 	ForceColorize = mode
 }
 
+/* Get color map */
 func GetColors() map[int]string {
 	return colors
 }
 
+/* Display color map */
 func ShowColors() {
 	fmt.Printf("%#v\n", colors)
 }
 
+/* Set new color map and return former map */
 func SetColors(n map[int]string) map[int]string {
 	old := colors
 	colors = n
@@ -164,6 +193,7 @@ func SetFlags(flag int) {
 	}
 }
 
+/* Set a prefix to log entries and return former prefix */
 func SetPrefix(prefix string) string {
 	defer logger.SetPrefix(prefix)
 	old := tags[0]
@@ -171,6 +201,7 @@ func SetPrefix(prefix string) string {
 	return old
 }
 
+/* Set an io.Writer to log output */
 func SetOutput(w io.Writer) {
 	if w != os.Stderr || w != os.Stdout {
 		isTerminal = false
@@ -178,6 +209,7 @@ func SetOutput(w io.Writer) {
 	logger.SetOutput(w)
 }
 
+/* Notice Time elapsed since start and reset start time reference */
 func AllDone() {
 	elapsed := time.Since(start)
 	defer resetStart()
@@ -186,6 +218,7 @@ func AllDone() {
 	Notice(fmt.Sprintf(formats["alldone"], elapsed))
 }
 
+/* Notice Time elapsed since last call to this function or since start otherwise and reset time reference */
 func ElapsedTime() {
 	elapsed := time.Since(last)
 	defer resetLast()
@@ -194,23 +227,29 @@ func ElapsedTime() {
 	Notice(fmt.Sprintf(formats["elapsed"], elapsed))
 }
 
+/* Reset start time reference */ 
 func resetStart() {
 	start = time.Now()
 }
 
+/* Reset time reference for ETA */
 func resetLast() {
 	last = time.Now()
 }
 
 //*** Levels ***
+
+// Get tag map
 func GetTags() [10]string {
 	return tags
 }
 
+// Display tag map
 func ShowTags() {
 	fmt.Printf("%#v\n", tags)
 }
 
+// Set a new tag map and return former map
 func SetTags(n [10]string) [10]string {
 	old := tags
 	tags = n
@@ -218,14 +257,18 @@ func SetTags(n [10]string) [10]string {
 }
 
 //*** Formats ***
+
+// Get format map
 func GetFormats() map[string]string {
 	return formats
 }
 
+// Display format map
 func ShowFormats() {
 	fmt.Printf("%#v\n", formats)
 }
 
+// Set a new format map and return former map
 func SetFormats(n map[string]string) map[string]string {
 	old := formats
 	formats = n
@@ -233,20 +276,25 @@ func SetFormats(n map[string]string) map[string]string {
 }
 
 //*** Parts ***
+
+// Get parts map
 func GetParts() map[string]bool {
 	return parts
 }
 
+// Display parts map
 func ShowParts() {
 	fmt.Printf("%#v\n", parts)
 }
 
+// Set new parts map and return former map
 func SetParts(n map[string]bool) map[string]bool {
 	old := parts
 	parts = n
 	return old
 }
 
+// Get status of output, whether it is a terminal or not
 func IsTerminal() bool {
 	return isTerminal
 }
@@ -260,39 +308,48 @@ func Silent(log string) {
 	Log(Lsilent, log)
 }
 
+// Emegency log
 func Emergency(log string) {
 	Log(Lemergency, log)
 }
 
+// Alert log
 func Alert(log string) {
 	Log(Lalert, log)
 }
 
+// Critical log
 func Critical(log string) {
 	Log(Lcritical, log)
 }
 
+// Error log
 func Error(log string) {
 	Log(Lerror, log)
 }
 
+// Warning log
 func Warning(log string) {
 	Log(Lwarning, log)
 }
 
+// Notice log
 func Notice(log string) {
 	Log(Lnotice, log)
 }
 
+// Info log
 func Info(log string) {
 	Log(Linfo, log)
 }
 
+// Debug log
 func Debug(log string) {
 	Log(Ldebug, log)
 }
 
-// Trace non string as debug
+// Trace log
+// Use 'empty' format for empty thing to be trace
 func Trace(trace interface{}) {
 	if fmt.Sprintf("%v", trace) == "[]" {
 		Log(Ltrace, fmt.Sprintf(formats["empty"], trace))
@@ -300,32 +357,38 @@ func Trace(trace interface{}) {
 		Log(Ltrace, fmt.Sprintf(formats["trace"], trace))
 	}
 }
+// Silent trace and avoid 'declared and not used' build errors
 func Trace_(trace interface{}) {}
 
-// Trace non string as debug with caller punctually
+// Trace log with caller punctually
 func TraceCall(trace interface{}) {
 	TraceCaller = true
 	defer SetTraceCaller(false)
 	Trace(trace)
 }
+// Silent trace and avoid 'declared and not used' build errors
 func TraceCall_(trace interface{}) {}
 
+// Log runtime infos as debug
 func Runtime() {
 	incr_offset()
 	defer decr_offset()
 	Debug(fmt.Sprintf(formats["runtime"], runtime.GOOS, runtime.GOARCH, runtime.NumCPU(), runtime.Compiler, runtime.GOROOT()))
 }
 
+// Increment stack depth offset
 func incr_offset() {
 	offset = offset + 1
 }
 
+// Decrement stack depth offset
 func decr_offset() {
 	offset = offset - 1
 }
 
+// Main log function.
+// 1st argument is level integer, 2nd argument log string
 func Log(level int, log string) {
-
 	if Verbosity >= level {
 		Str := logfmt(level, log)
 		logger.Println(Str)
@@ -342,6 +405,7 @@ func Log(level int, log string) {
 
 //****** Internal functions *************************************
 
+// Log formatter
 func logfmt(level int, log string) string {
 	Fmt := formats["default"]
 	Tag := tags[level]
@@ -368,6 +432,7 @@ func logfmt(level int, log string) string {
 	return Str
 }
 
+// Log colorization
 func colorize(what string, level int, str string) string {
 	if isTerminal == false && ForceColorize == false {
 		return str
@@ -379,6 +444,7 @@ func colorize(what string, level int, str string) string {
 	}
 }
 
+// Set color from color map
 func setcolor(what string, level int, str string) string {
 	Ret := ""
 	switch colors[level] {
@@ -502,6 +568,8 @@ func setcolor(what string, level int, str string) string {
 /*
  *   Terminal
  */
+
+// Terminal size structure
 type winsize struct {
 	Row    uint16
 	Col    uint16
@@ -509,6 +577,7 @@ type winsize struct {
 	Ypixel uint16
 }
 
+// Get terminal width
 func getWidth() uint {
 	ws := &winsize{}
 	retCode, _, errno := syscall.Syscall(syscall.SYS_IOCTL,
