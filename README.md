@@ -200,6 +200,13 @@ log.SetExitOnError(true) // Exit if log level reach Error or worst.
 ```
 If the case, the error message is generated and a debug level may appear, depending current verbosity, indicating that an immediate exit occured, and telling what is the program exit code. The exit code is equal to the level reached by the last fatal error, i.e 1 (emergency) to 4 (error) , or even 5 if warning considered error.
 
+Set option to silent empty log messages :
+
+```go
+slogan.SetNoEmpty(true) // Silent empty messages
+```
+Note: Exit on error is done even if message is empty and option set.
+
 ### Formats ###
 
 Formats can be configured by settings new "Sprintf" values to the three arguments passed to `slogan` functions :

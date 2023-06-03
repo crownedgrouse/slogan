@@ -128,6 +128,8 @@ var CallerBase bool = true
 var Colorize bool = true
 // should colorize even if output is not a terminal ?
 var ForceColorize bool = false 
+// should empty log string logged ?
+var NoEmpty bool = false
 
 //************ Exported functions for configuration *************
 
@@ -159,6 +161,11 @@ func SetColor(mode bool) {
 /* Force colorization even if not a terminal */
 func SetForceColor(mode bool) {
 	ForceColorize = mode
+}
+
+/**/
+func SetNoEmpty(mode bool) {
+	NoEmpty = mode
 }
 
 /* Get color map */
@@ -390,8 +397,14 @@ func decr_offset() {
 // 1st argument is level integer, 2nd argument log string
 func Log(level int, log string) {
 	if Verbosity >= level {
-		Str := logfmt(level, log)
-		logger.Println(Str)
+		allow := true
+		if NoEmpty == true && len(log) == 0 {
+			allow = false
+		}
+		if allow {
+			Str := logfmt(level, log)
+			logger.Println(Str)
+		}
 	}
 	if ((level < Lwarning) || (level == Lwarning && WarningAsError == true)) && (ExitOnError == true) {
 		incr_offset()
